@@ -1,34 +1,16 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   reactStrictMode: true,
-  images: {
-    domains: ["api.screenshotmachine.com", "www.google.com"],
-    remotePatterns: [
-      {
-        protocol: "https",https://fast.com/ja/#
-        hostname: "**",
-      },
-    ],
-  },
   async headers() {
     return [
       {
-        source: "/:path*",
+        source: '/api/:path*',
         headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
+          { key: 'Cache-Control', value: 's-maxage=3600, stale-while-revalidate' },
+          { key: 'Content-Security-Policy', value: "default-src 'self'; img-src data: https:; script-src 'self' 'unsafe-inline';" },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
         ],
       },
     ];
   },
-  // PWA用の設定（next-pwaを使う場合）
-  pwa: {
-    dest: "public",
-    register: true,
-    skipWaiting: true,
-  },
 };
-
-module.exports = nextConfig;
